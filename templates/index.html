@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symphony AI - AI Music Composer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- MIDI Playback & Synthesis Libraries -->
+    <script src="{{ url_for('static', filename='js/midiplayer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/soundfont-player.min.js') }}"></script>
+</head>
+<body>
+    <div class="spotify-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="ph-bold ph-waveform"></i>
+                <span>Symphony AI</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="active" id="nav-home"><i class="ph-fill ph-house"></i> Home</a>
+                <a href="#" id="nav-library"><i class="ph-bold ph-music-notes"></i> Library</a>
+            </nav>
+
+            <div class="sidebar-section">
+                <div class="audio-engine-card">
+                    <div class="engine-header">
+                        <i class="ph-bold ph-speaker-hifi"></i>
+                        <span>Audio Engine</span>
+                    </div>
+                    <p id="engine-status" class="engine-offline">Initializing Synth...</p>
+                    <button class="init-engine-btn" id="btn-init-engine">Activate Audio</button>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="sidebar-section-title">Quick Actions</div>
+            <div class="playlist-list">
+                <a href="#studio-section"><i class="ph ph-sparkle"></i> Compose Music</a>
+                <a href="#library-section"><i class="ph ph-playlist"></i> Generated Library</a>
+                <a href="#quick-train"><i class="ph ph-cpu"></i> Preprocess Data</a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="navigation-arrows">
+                    <button class="arrow-btn"><i class="ph ph-caret-left"></i></button>
+                    <button class="arrow-btn"><i class="ph ph-caret-right"></i></button>
+                </div>
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=80&q=80" alt="Profile" class="profile-pic">
+                    <span>AI Composer Studio</span>
+                </div>
+            </header>
+
+            <!-- Main Area Welcome -->
+            <section class="content-section">
+                <div class="welcome-banner">
+                    <div class="banner-content">
+                        <span class="badge">LSTM Neural Network</span>
+                        <h1 class="welcome-heading">Symphony AI Composer</h1>
+                        <p class="banner-subtitle">Generate classical piano masterpieces note-by-note using state-of-the-art Deep Learning models trained on Frédéric Chopin collections.</p>
+                    </div>
+                </div>
+
+                <!-- Custom Studio Controls Section -->
+                <div class="section-container" id="studio-section">
+                    <h2 class="section-title">Composer Dashboard</h2>
+                    <div class="composer-control-panel">
+                        <div class="control-form-group">
+                            <label for="input-song-title"><i class="ph ph-pencil-simple-line"></i> Composition Title</label>
+                            <input type="text" id="input-song-title" placeholder="e.g. Symphony of Dreams, Chopin Revived..." maxlength="40">
+                        </div>
+                        
+                        <div class="control-form-group">
+                            <label for="select-model-weights"><i class="ph ph-brain"></i> Neural Network Weights</label>
+                            <select id="select-model-weights">
+                                <option value="final_model.keras">Loading available weights...</option>
+                            </select>
+                        </div>
+
+                        <div class="control-form-group">
+                            <label for="select-music-genre"><i class="ph ph-music-notes-simple"></i> Composition Genre</label>
+                            <select id="select-music-genre">
+                                <option value="piano">🎹 Classical Piano (LSTM Network)</option>
+                                <option value="phonk">🔊 Phonk Beat (Procedural Synth)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-form-actions">
+                            <button class="btn-compose-action" id="btn-start-composition">
+                                <i class="ph-bold ph-sparkle"></i> Compose Masterpiece
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Library Grid Section -->
+                <div class="section-container" id="library-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Your Music Library</h2>
+                        <span class="songs-count" id="songs-count-label">0 Songs Available</span>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="songs-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th>Title</th>
+                                    <th>Artist</th>
+                                    <th>Model Source</th>
+                                    <th>Date Created / Type</th>
+                                    <th style="text-align: right; width: 150px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="songs-list-tbody">
+                                <!-- Populated dynamically by javascript -->
+                                <tr>
+                                    <td colspan="6" class="loading-placeholder">
+                                        <i class="ph-bold ph-spinner ph-spin"></i> Fetching your tracks...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quick Training / Preprocessing Box -->
+                <div class="section-container">
+                    <h2 class="section-title">Neural Processing Station</h2>
+                    <div class="quick-grid">
+                        <div class="quick-card" id="quick-train">
+                            <div class="quick-img-box train-color">
+                                <i class="ph-fill ph-cpu"></i>
+                            </div>
+                            <div class="quick-text">
+                                <h3>Data Preprocessor</h3>
+                                <p id="preprocess-status">Preprocess raw MIDI dataset for custom local training</p>
+                            </div>
+                            <button class="quick-play-btn" id="train-play-btn" title="Run Preprocessing"><i class="ph-fill ph-lightning"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Player Bar (Bottom) -->
+        <footer class="player-bar">
+            <!-- Left Info -->
+            <div class="player-left">
+                <div class="current-track-img">
+                    <i class="ph-bold ph-waveform"></i>
+                    <div class="wave-visualizer hidden" id="card-visualizer">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="current-track-info">
+                    <h4 id="player-track-name">Select a track</h4>
+                    <p id="player-track-artist">Symphony AI Composer</p>
+                </div>
+                <button class="track-like-btn" id="track-like"><i class="ph ph-heart"></i></button>
+            </div>
+
+            <!-- Center Controls -->
+            <div class="player-center">
+                <div class="player-controls">
+                    <button class="control-btn" id="btn-shuffle" title="Shuffle"><i class="ph-bold ph-shuffle"></i></button>
+                    <button class="control-btn" id="btn-prev" title="Previous"><i class="ph-fill ph-caret-double-left"></i></button>
+                    <button class="play-pause-btn" id="master-play-pause" title="Play"><i class="ph-fill ph-play"></i></button>
+                    <button class="control-btn" id="btn-next" title="Next"><i class="ph-fill ph-caret-double-right"></i></button>
+                    <button class="control-btn" id="btn-loop" title="Repeat"><i class="ph-bold ph-repeat"></i></button>
+                </div>
+                
+                <div class="playback-bar">
+                    <span class="time-stamp" id="current-time">0:00</span>
+                    <div class="progress-bar-container" id="timeline-container">
+                        <div class="progress-bar-fill" id="track-progress" style="width: 0%;"></div>
+                    </div>
+                    <span class="time-stamp" id="total-time">0:00</span>
+                </div>
+            </div>
+
+            <!-- Right Options -->
+            <div class="player-right">
+                <span class="model-badge" id="player-model-badge">No Model Active</span>
+                <button class="control-btn" id="btn-mute" title="Volume"><i class="ph ph-speaker-simple-high"></i></button>
+                <div class="volume-bar-container" id="volume-slider-container">
+                    <div class="volume-bar-fill" id="volume-progress" style="width: 75%;"></div>
+                </div>
+                <a id="action-download-link" href="#" class="action-btn-download hidden" download title="Download MIDI"><i class="ph-bold ph-download-simple"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

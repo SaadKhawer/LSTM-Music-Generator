@@ -1,0 +1,23 @@
+{
+    "composition_20260520_113155.mid": {
+        "title": "Chopin Revival",
+        "model": "final_model.keras",
+        "timestamp": "2026-05-20 11:34"
+    },
+    "composition_20260520_114218.mid": {
+        "title": "Chopin Revival II",
+        "model": "final_model.keras",
+        "timestamp": "2026-05-20 11:44"
+    },
+    "composition_20260520_114755.mid": {
+        "title": "Symphonic Chopin V3",
+        "model": "final_model.keras",
+        "timestamp": "2026-05-20 11:49"
+    },
+    "phonk_20260520_120320.mid": {
+        "title": "Night Drive Phonk",
+        "model": "Procedural Phonk Synth",
+        "genre": "phonk",
+        "timestamp": "2026-05-20 12:04"
+    }
+}

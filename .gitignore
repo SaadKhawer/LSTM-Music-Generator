@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+
+# Ignore intermediate training checkpoints to keep repo size small
+models/weights-improvement-*.keras
